@@ -41,7 +41,7 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  imdb_scraper: 01.0.2
+  imdb_scraper: 0.0.2
 ```
 
 ## Usage

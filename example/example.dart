@@ -1,54 +1,3 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/tools/pub/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/to/develop-packages).
--->
-
-# imdb_scraper
-
-A Dart package for scraping movie and series information from IMDb, including titles, ratings, cast details, and more.
-
-## Features
-
-- 🎬 Fetch IMDb IDs by movie/series name
-- 📊 Get detailed information including:
-  - Title, original title, and content rating
-  - Release date and runtime
-  - Ratings and vote counts
-  - Cast and crew information
-  - Plot summaries
-  - Box office statistics
-  - Similar titles recommendations
-- 🖼️ Retrieve poster images
-- 🎥 Access trailer URLs
-- 📱 Lightweight and easy to use
-
-## Getting started
-
-### Prerequisites
-- Dart SDK (>=3.0.0)
-- Internet connection (for API calls)
-
-### Installation
-Add this to your `pubspec.yaml`:
-
-```yaml
-dependencies:
-  imdb: ^1.0.0
-```
-
-## Usage
-
-### Basic example
-
-```dart
 import 'package:imdb/imdb.dart';
 
 void main() async {
@@ -122,19 +71,3 @@ void main() async {
     print('Failed to get details for IMDb ID: $imdbId');
   }
 }
-```
-[Example]("https://github.com/MrTG-CodeBot/imdb/example/example.dart")
-
-## Additional information
-
-### Contributing
-We welcome contributions! 
-
-### Issues
-Found a bug? Please file an issue on our GitHub "repository" https://github.com/yourusername/imdb_scraper/issues
-
-### Disclaimer
-This package is not affiliated with IMDb. Use responsibly and respect IMDb's terms of service.
-
-### License
-MIT - See "LICENSE" for more information.

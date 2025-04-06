@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import 'package:imdb_scraper/imdb_scraper.dart';
+=======
+import 'package:imdb/imdb_scraper.dart';
+>>>>>>> 2b0399e07563160184a6a19265b46a99e0ca0b69
 
 void main() async {
   final imdb = Imdb();

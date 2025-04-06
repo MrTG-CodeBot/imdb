@@ -123,7 +123,7 @@ void main() async {
   }
 }
 ```
-[Example](https://github.com/MrTG-CodeBot/imdb//example/example.dart)
+[Example](https://github.com/MrTG-CodeBot/imdb_scraper/blob/main/example/example.dart)
 
 ## Additional information
 

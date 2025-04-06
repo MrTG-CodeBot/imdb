@@ -1,7 +1,7 @@
-name: imdb
+name: imdb_scraper
 description: "A Dart package for scraping movie and series information from IMDb, including titles, ratings, cast details, and more."
 version: 0.0.1
-homepage: https://github.com/MrTG-CodeBot/imdb
+homepage: https://github.com/MrTG-CodeBot/imdb_scraper
 
 environment:
   sdk: ^3.6.2

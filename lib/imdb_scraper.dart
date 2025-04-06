@@ -1,4 +1,4 @@
-library imdb;
+library imdb_scraper;
 
 import 'dart:convert';
 import 'package:http/http.dart' as http;

@@ -34,7 +34,7 @@ A Dart package for scraping movie and series information from IMDb, including ti
 
 ### Prerequisites
 - Dart SDK (>=3.0.0)
-- Internet connection (for API calls)
+
 
 ### Installation
 Add this to your `pubspec.yaml`:
@@ -49,7 +49,7 @@ dependencies:
 ### Basic example
 
 ```dart
-import 'package:imdb/imdb.dart';
+import 'package:imdb/imdb_scraper.dart';
 
 void main() async {
   final imdb = Imdb();
@@ -131,7 +131,7 @@ void main() async {
 We welcome contributions! 
 
 ### Issues
-Found a bug? Please file an issue on our GitHub "repository" https://github.com/yourusername/imdb_scraper/issues
+Found a bug? Please file an issue on our GitHub [repository](https://github.com/MrTG-CodeBot/imdb_scraper/issues)
 
 ### Disclaimer
 This package is not affiliated with IMDb. Use responsibly and respect IMDb's terms of service.

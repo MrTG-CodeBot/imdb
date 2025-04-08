@@ -48,19 +48,27 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  imdb_scraper: 0.0.4
+  imdb_scraper: 1.0.4
 ```
 
 ## Usage
 
 ### Basic example for search a movie or series
-
 ```dart
+ // Example demonstrating comprehensive usage of the IMDb scraper package.
+ // Shows how to:
+ // 1. Search for a title to get its IMDb ID
+ // 2. Fetch detailed information using the ID
+ // 3. Access and display various data points
+
+
 import 'package:imdb_scraper/imdb_scraper.dart';
 
 void main() async {
+  // Initialize the IMDb scraper
   final imdb = Imdb();
   
+  // Search for a movie by title
   final movieName = "weathering with you"; 
   final imdbId = await imdb.getImdbId(movieName);
   
@@ -69,13 +77,15 @@ void main() async {
     return;
   }
   
+  // Get detailed information
   final details = await imdb.getDetails(imdbId);
   
   if (details != null) {
+    // Display all available information
     print('\n=== Basic Information ===');
     print('Title: ${details['title']}');
     print('Original Title: ${details['originalTitle']}');
-    print('IMDb ID: ${details['id']}');
+        print('IMDb ID: ${details['id']}');
     print('Rating: ${details['rating']}');
     print('Release Date: ${details['releaseDate']['year']}-${details['releaseDate']['month']}-${details['releaseDate']['day']}');
     print('Runtime: ${details['runtime']}');
@@ -134,46 +144,67 @@ void main() async {
 
 ### Basic example for get the trending movies
 ```dart
+/// Example demonstrating how to fetch and display trending movies from IMDb.
+///
+/// Shows:
+/// - How to get the current Moviemeter chart
+/// - Basic movie information structure
+/// - Simple display formatting
+///
+/// Usage:
+
 import 'package:imdb_scraper/imdb_scraper.dart';
 
-void main() async{
+void main() async {
   final imdb = Imdb();
   final movieData = await imdb.fetchIMDbMovieData();
-    print('Fetched ${movieData.length} movies:');
-    int count = 1;
-    print(movieData);
-    movieData.forEach((ids, datas) {
-      print('$ids: ${datas['title']} (${datas['year']}) - Rating: ${datas['rating']}');
-      print('Poster: ${datas['posterUrl']}');
-      print('${count++}\n');
-    });
+  
+  print('Fetched ${movieData.length} movies:');
+  int count = 1;
+  
+  movieData.forEach((ids, datas) {
+    print('$ids: ${datas['title']} (${datas['year']}) - Rating: ${datas['rating']}');
+    print('Poster: ${datas['posterUrl']}');
+    print('${count++}\n');
+  });
 }
 ```
 [Get the trending movies](https://github.com/MrTG-CodeBot/imdb_scraper/blob/main/example/gettrendingmovies.dart)
-### Basic example for get the trending series
 
+
+### Basic example for get the trending series
 ```dart
+/// Example demonstrating how to fetch and display trending TV series from IMDb.
+///
+/// Shows:
+/// - How to get the current TV Meter chart
+/// - Series-specific information structure
+/// - Handling of ongoing vs completed series
+///
+/// Usage:
 import 'package:imdb_scraper/imdb_scraper.dart';
 
-void main() async{
+void main() async {
   final imdb = Imdb();
   final result = await imdb.fetchIMDbSeriesData();
+  
   print('Status: ${result['status']}');
   if (result['status'] == 'success') {
-  print('Series Data:');
-  for (var series in result['data']) {
-    print('Title: ${series['title']}');
-    print('Type: ${series['type']}');
-    print('Poster URL: ${series['posterUrl']}');
-    print('Start Year: ${series['startYear']}');
-    print('End Year: ${series['endYear']}');
-    print('Rating: ${series['rating']}');
-    print('Vote Count: ${series['voteCount']}');
-    print('Episodes: ${series['episodes']}');
-    print('---');
+    print('Series Data:');
+    for (var series in result['data']) {
+      print('Title: ${series['title']}');
+      print('Type: ${series['type']}');
+      print('Poster URL: ${series['posterUrl']}');
+      print('Start Year: ${series['startYear']}');
+      print('End Year: ${series['endYear']}');
+      print('Rating: ${series['rating']}');
+      print('Vote Count: ${series['voteCount']}');
+      print('Episodes: ${series['episodes']}');
+      print('---');
+    }
   }
 }
-}
+
 ```
 [Get the trending series](https://github.com/MrTG-CodeBot/imdb_scraper/blob/main/example/gettrendingseries.dart)
 ## Additional information

@@ -6,7 +6,8 @@ import 'package:html/parser.dart' show parse;
 
 class Imdb {
   final _header = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
+    "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
     "Accept": "*/*",
     "Accept-Language": "en-US,en;q=0.9",
     "Accept-Encoding": "gzip, deflate, br, zstd",
@@ -78,13 +79,14 @@ class Imdb {
       final response = await http.get(url, headers: _header);
       if (response.statusCode == 200) {
         final document = parse(response.body);
-        final scriptElement =
-            document.querySelector('script#__NEXT_DATA__[type="application/json"]');
+        final scriptElement = document
+            .querySelector('script#__NEXT_DATA__[type="application/json"]');
         if (scriptElement != null) {
           final jsonString = scriptElement.innerHtml;
           final jsonData = jsonDecode(jsonString) as Map<String, dynamic>;
 
-          final props = jsonData['props']?['pageProps']?['aboveTheFoldData'] ?? {};
+          final props =
+              jsonData['props']?['pageProps']?['aboveTheFoldData'] ?? {};
           final mainColumnData =
               jsonData['props']?['pageProps']?['mainColumnData'] ?? {};
           final titleType = props['titleType'] ?? {};
@@ -141,10 +143,11 @@ class Imdb {
           for (final credit in principalCredits) {
             final category = credit['category']?['text'] ?? '';
             if (category == 'Director') {
-              director = credit['credits']?[0]?['name']?['nameText']?['text'] ??
-                  '';
+              director =
+                  credit['credits']?[0]?['name']?['nameText']?['text'] ?? '';
             } else if (category == 'Writer') {
-              writer = credit['credits']?[0]?['name']?['nameText']?['text'] ?? '';
+              writer =
+                  credit['credits']?[0]?['name']?['nameText']?['text'] ?? '';
             } else if (category == 'Stars') {
               final credits = credit['credits'] ?? [];
               for (final person in credits.take(3)) {
@@ -165,23 +168,25 @@ class Imdb {
           final reviewsCount = mainColumnData['reviews']?['total'] ?? 0;
 
           final countries = props['countriesOfOrigin']?['countries'] ?? [];
-          final countryOfOrigin = countries.isNotEmpty ? countries[0]['id'] : '';
+          final countryOfOrigin =
+              countries.isNotEmpty ? countries[0]['id'] : '';
 
           final boxOffice = {
-            'productionBudget': mainColumnData['productionBudget']?['budget'] ?? {},
+            'productionBudget':
+                mainColumnData['productionBudget']?['budget'] ?? {},
             'lifetimeGross': mainColumnData['lifetimeGross']?['total'] ?? {},
-            'openingWeekendGross': mainColumnData['openingWeekendGross']?['gross']
-                    ?['total'] ??
-                {}
+            'openingWeekendGross':
+                mainColumnData['openingWeekendGross']?['gross']?['total'] ?? {}
           };
 
-          final similarTitles = (mainColumnData['moreLikeThisTitles']?['edges'] ?? [])
-              .take(5)
-              .map((title) => {
-                    'title': title['node']?['titleText']?['text'] ?? '',
-                    'year': title['node']?['releaseYear']?['year'] ?? 0
-                  })
-              .toList();
+          final similarTitles =
+              (mainColumnData['moreLikeThisTitles']?['edges'] ?? [])
+                  .take(5)
+                  .map((title) => {
+                        'title': title['node']?['titleText']?['text'] ?? '',
+                        'year': title['node']?['releaseYear']?['year'] ?? 0
+                      })
+                  .toList();
 
           return {
             'id': id,
@@ -225,77 +230,79 @@ class Imdb {
       return null;
     }
   }
+
   Future<Map<String, dynamic>> __fetchJsonData(String url) async {
     try {
       final response = await http.get(Uri.parse(url));
-      
+
       if (response.statusCode != 200) {
         throw Exception('Failed to load data: ${response.statusCode}');
       }
-      
+
       final html = response.body;
       final startIndex = html.indexOf('id="__NEXT_DATA__"');
       if (startIndex == -1) throw Exception('Script tag not found');
-      
+
       final scriptStart = html.indexOf('>', startIndex) + 1;
       final scriptEnd = html.indexOf('</script>', scriptStart);
       final jsonString = html.substring(scriptStart, scriptEnd);
-      
+
       return json.decode(jsonString);
     } catch (e) {
       throw Exception('Error fetching IMDb data: $e');
     }
   }
 
-Future<Map<String, dynamic>> fetchIMDbMovieData() async {
-  final jsonData = await __fetchJsonData(
-    'https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm'
-  );
-  
-  final props = jsonData['props']['pageProps']['pageData']['chartTitles']['edges'];
-  final movies = <String, dynamic>{};
-  
-  for (var movie in props) {
-    final node = movie['node'];
-    final id = node['id'];
-    movies[id] = {
-      'title': node['titleText']['text'],
-      'year': node['releaseYear']['year'],
-      'rating': node['ratingsSummary']?['aggregateRating']?.toString() ?? 'N/A',
-      'posterUrl': node['primaryImage']?['url'] ?? '',
+  Future<Map<String, dynamic>> fetchIMDbMovieData() async {
+    final jsonData = await __fetchJsonData(
+        'https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm');
+
+    final props =
+        jsonData['props']['pageProps']['pageData']['chartTitles']['edges'];
+    final movies = <String, dynamic>{};
+
+    for (var movie in props) {
+      final node = movie['node'];
+      final id = node['id'];
+      movies[id] = {
+        'title': node['titleText']['text'],
+        'year': node['releaseYear']['year'],
+        'rating':
+            node['ratingsSummary']?['aggregateRating']?.toString() ?? 'N/A',
+        'posterUrl': node['primaryImage']?['url'] ?? '',
+      };
+    }
+
+    return movies;
+  }
+
+  Future<Map<String, dynamic>> fetchIMDbSeriesData() async {
+    final jsonData = await __fetchJsonData(
+        'https://www.imdb.com/chart/tvmeter/?ref_=nv_tvv_mptv');
+
+    final props =
+        jsonData['props']['pageProps']['pageData']['chartTitles']['edges'];
+    final seriesList = <Map<String, dynamic>>[];
+
+    for (var item in props) {
+      final node = item['node'];
+      final releaseYear = node['releaseYear'];
+
+      seriesList.add({
+        'title': node['titleText']['text'],
+        'type': node['titleType']['text'],
+        'posterUrl': node['primaryImage']?['url'],
+        'startYear': releaseYear['year'],
+        'endYear': releaseYear['endYear'],
+        'rating': node['ratingsSummary']?['aggregateRating'],
+        'voteCount': node['ratingsSummary']?['voteCount'],
+        'episodes': node['episodes']?['episodes']?['total'],
+      });
+    }
+
+    return {
+      'status': 'success',
+      'data': seriesList,
     };
   }
-  
-  return movies;
-}
-
-Future<Map<String, dynamic>> fetchIMDbSeriesData() async {
-  final jsonData = await __fetchJsonData(
-    'https://www.imdb.com/chart/tvmeter/?ref_=nv_tvv_mptv'
-  );
-  
-  final props = jsonData['props']['pageProps']['pageData']['chartTitles']['edges'];
-  final seriesList = <Map<String, dynamic>>[];
-  
-  for (var item in props) {
-    final node = item['node'];
-    final releaseYear = node['releaseYear'];
-    
-    seriesList.add({
-      'title': node['titleText']['text'],
-      'type': node['titleType']['text'],
-      'posterUrl': node['primaryImage']?['url'],
-      'startYear': releaseYear['year'],
-      'endYear': releaseYear['endYear'],
-      'rating': node['ratingsSummary']?['aggregateRating'],
-      'voteCount': node['ratingsSummary']?['voteCount'],
-      'episodes': node['episodes']?['episodes']?['total'],
-    });
-  }
-  
-  return {
-    'status': 'success',
-    'data': seriesList,
-  };
-}
 }

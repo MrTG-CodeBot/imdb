@@ -9,3 +9,7 @@ A Dart package for scraping movie and series information from IMDb, including ti
 ## 0.0.4
 
 Added the get trending movies data and get the trending series data.
+
+## 1.0.4
+
+Added the get trending movies data and get the trending series data.

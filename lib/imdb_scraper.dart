@@ -225,4 +225,77 @@ class Imdb {
       return null;
     }
   }
+  Future<Map<String, dynamic>> __fetchJsonData(String url) async {
+    try {
+      final response = await http.get(Uri.parse(url));
+      
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load data: ${response.statusCode}');
+      }
+      
+      final html = response.body;
+      final startIndex = html.indexOf('id="__NEXT_DATA__"');
+      if (startIndex == -1) throw Exception('Script tag not found');
+      
+      final scriptStart = html.indexOf('>', startIndex) + 1;
+      final scriptEnd = html.indexOf('</script>', scriptStart);
+      final jsonString = html.substring(scriptStart, scriptEnd);
+      
+      return json.decode(jsonString);
+    } catch (e) {
+      throw Exception('Error fetching IMDb data: $e');
+    }
+  }
+
+Future<Map<String, dynamic>> fetchIMDbMovieData() async {
+  final jsonData = await __fetchJsonData(
+    'https://www.imdb.com/chart/moviemeter/?ref_=nv_mv_mpm'
+  );
+  
+  final props = jsonData['props']['pageProps']['pageData']['chartTitles']['edges'];
+  final movies = <String, dynamic>{};
+  
+  for (var movie in props) {
+    final node = movie['node'];
+    final id = node['id'];
+    movies[id] = {
+      'title': node['titleText']['text'],
+      'year': node['releaseYear']['year'],
+      'rating': node['ratingsSummary']?['aggregateRating']?.toString() ?? 'N/A',
+      'posterUrl': node['primaryImage']?['url'] ?? '',
+    };
+  }
+  
+  return movies;
+}
+
+Future<Map<String, dynamic>> fetchIMDbSeriesData() async {
+  final jsonData = await __fetchJsonData(
+    'https://www.imdb.com/chart/tvmeter/?ref_=nv_tvv_mptv'
+  );
+  
+  final props = jsonData['props']['pageProps']['pageData']['chartTitles']['edges'];
+  final seriesList = <Map<String, dynamic>>[];
+  
+  for (var item in props) {
+    final node = item['node'];
+    final releaseYear = node['releaseYear'];
+    
+    seriesList.add({
+      'title': node['titleText']['text'],
+      'type': node['titleType']['text'],
+      'posterUrl': node['primaryImage']?['url'],
+      'startYear': releaseYear['year'],
+      'endYear': releaseYear['endYear'],
+      'rating': node['ratingsSummary']?['aggregateRating'],
+      'voteCount': node['ratingsSummary']?['voteCount'],
+      'episodes': node['episodes']?['episodes']?['total'],
+    });
+  }
+  
+  return {
+    'status': 'success',
+    'data': seriesList,
+  };
+}
 }

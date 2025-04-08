@@ -17,8 +17,8 @@ A Dart package for scraping movie and series information from IMDb, including ti
 
 ## Features
 
-- 🎬 Fetch IMDb IDs by movie/series name
-- 📊 Get detailed information including:
+-  Fetch IMDb IDs by movie/series name
+-  Get detailed information including:
   - Title, original title, and content rating
   - Release date and runtime
   - Ratings and vote counts
@@ -26,9 +26,16 @@ A Dart package for scraping movie and series information from IMDb, including ti
   - Plot summaries
   - Box office statistics
   - Similar titles recommendations
-- 🖼️ Retrieve poster images
-- 🎥 Access trailer URLs
-- 📱 Lightweight and easy to use
+-  Retrieve poster images
+-  Access trailer URLs
+-  Lightweight and easy to use
+- Fetch current trending movies from IMDb's Moviemeter chart
+- Fetch popular TV series from IMDb's TV Meter chart
+- Get detailed information including:
+  - Titles and release years
+  - Ratings and vote counts
+  - Poster images
+  - For TV series: start/end years and episode counts
 
 ## Getting started
 
@@ -41,12 +48,12 @@ Add this to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  imdb_scraper: 0.0.2
+  imdb_scraper: 0.0.4
 ```
 
 ## Usage
 
-### Basic example
+### Basic example for search a movie or series
 
 ```dart
 import 'package:imdb_scraper/imdb_scraper.dart';
@@ -123,8 +130,52 @@ void main() async {
   }
 }
 ```
-[Example](https://github.com/MrTG-CodeBot/imdb_scraper/blob/main/example/example.dart)
+[Search movie or series](https://github.com/MrTG-CodeBot/imdb_scraper/blob/main/example/example.dart)
 
+### Basic example for get the trending movies
+```dart
+import 'package:imdb_scraper/imdb_scraper.dart';
+
+void main() async{
+  final imdb = Imdb();
+  final movieData = await imdb.fetchIMDbMovieData();
+    print('Fetched ${movieData.length} movies:');
+    int count = 1;
+    print(movieData);
+    movieData.forEach((ids, datas) {
+      print('$ids: ${datas['title']} (${datas['year']}) - Rating: ${datas['rating']}');
+      print('Poster: ${datas['posterUrl']}');
+      print('${count++}\n');
+    });
+}
+```
+[Get the trending movies](https://github.com/MrTG-CodeBot/imdb_scraper/blob/main/example/gettrendingmovies.dart)
+### Basic example for get the trending series
+
+```dart
+import 'package:imdb_scraper/imdb_scraper.dart';
+
+void main() async{
+  final imdb = Imdb();
+  final result = await imdb.fetchIMDbSeriesData();
+  print('Status: ${result['status']}');
+  if (result['status'] == 'success') {
+  print('Series Data:');
+  for (var series in result['data']) {
+    print('Title: ${series['title']}');
+    print('Type: ${series['type']}');
+    print('Poster URL: ${series['posterUrl']}');
+    print('Start Year: ${series['startYear']}');
+    print('End Year: ${series['endYear']}');
+    print('Rating: ${series['rating']}');
+    print('Vote Count: ${series['voteCount']}');
+    print('Episodes: ${series['episodes']}');
+    print('---');
+  }
+}
+}
+```
+[Get the trending series](https://github.com/MrTG-CodeBot/imdb_scraper/blob/main/example/gettrendingseries.dart)
 ## Additional information
 
 ### Contributing
@@ -137,4 +188,4 @@ Found a bug? Please file an issue on our GitHub [repository](https://github.com/
 This package is not affiliated with IMDb. Use responsibly and respect IMDb's terms of service.
 
 ### License
-MIT - See "LICENSE" for more information.
+MIT - See [LICENSE](https://github.com/MrTG-CodeBot/imdb_scraper/blob/main/LICENSE) for more information.
